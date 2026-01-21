@@ -1,0 +1,17 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Programs" %>
+
+<h1>Programs</h1>
+
+<div id="programs">
+  <% @programs.each do |program| %>
+    <%= render program %>
+    <p>
+      <%= link_to "Show this program", program %>
+      <%= link_to "Execute", new_execution_path(program_id: program.id) %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New program", new_program_path %>

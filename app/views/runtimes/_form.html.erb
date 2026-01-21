@@ -1,0 +1,36 @@
+<%= form_with(model: runtime) do |form| %>
+  <% if runtime.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(runtime.errors.count, "error") %> prohibited this runtime from being saved:</h2>
+      <ul>
+        <% runtime.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :instruction_set, style: "display: block" %>
+    <%= form.text_field :instruction_set, value: runtime.instruction_set.presence || "c0-vm" %>
+  </div>
+
+  <div>
+    <%= form.label :adapter_class, style: "display: block" %>
+    <%= form.text_field :adapter_class, value: runtime.adapter_class.presence || "ExecutionLab::Runtimes::RubyC0VM" %>
+  </div>
+
+  <div>
+    <%= form.label :config, style: "display: block" %>
+    <%= form.text_area :config, value: runtime.config.to_json, rows: 6 %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

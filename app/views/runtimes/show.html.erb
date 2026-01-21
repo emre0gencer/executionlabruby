@@ -1,0 +1,17 @@
+<% content_for :title, @runtime.name %>
+
+<h1><%= @runtime.name %></h1>
+
+<p><strong>Instruction set:</strong> <%= @runtime.instruction_set %></p>
+<p><strong>Adapter class:</strong> <%= @runtime.adapter_class %></p>
+
+<% if @runtime.config.present? %>
+  <h2>Config</h2>
+  <pre><%= JSON.pretty_generate(@runtime.config) %></pre>
+<% end %>
+
+<div>
+  <%= link_to "Edit", edit_runtime_path(@runtime) %> |
+  <%= link_to "Back", runtimes_path %>
+  <%= button_to "Destroy", @runtime, method: :delete %>
+</div>

@@ -1,0 +1,22 @@
+<div id="<%= dom_id program %>">
+  <div>
+    <strong>Name:</strong>
+    <%= program.name %>
+  </div>
+
+  <div>
+    <strong>Description:</strong>
+    <%= program.description %>
+  </div>
+
+  <div>
+    <strong>Instruction set:</strong>
+    <%= program.instruction_set %>
+  </div>
+
+  <div>
+    <strong>Bytecode:</strong>
+    <pre><%= JSON.pretty_generate(program.bytecode || {}) %></pre>
+  </div>
+
+</div>

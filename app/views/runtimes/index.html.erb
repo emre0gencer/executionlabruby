@@ -1,0 +1,17 @@
+<% content_for :title, "Runtimes" %>
+
+<h1>Runtimes</h1>
+
+<div>
+  <% @runtimes.each do |runtime| %>
+    <div>
+      <strong><%= runtime.name %></strong>
+      <div>Instruction set: <%= runtime.instruction_set %></div>
+      <div>Adapter: <%= runtime.adapter_class %></div>
+      <div><%= link_to "Show", runtime_path(runtime) %></div>
+    </div>
+    <hr />
+  <% end %>
+</div>
+
+<%= link_to "New runtime", new_runtime_path %>

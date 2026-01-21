@@ -1,0 +1,24 @@
+<% content_for :title, "New Execution" %>
+
+<h1>New Execution</h1>
+
+<%= form_with url: executions_path, method: :post do |form| %>
+  <div>
+    <%= form.label :program_id, "Program", style: "display: block" %>
+    <%= form.collection_select :program_id, @programs, :id, :name, selected: @program&.id %>
+  </div>
+
+  <div>
+    <%= form.label :runtime_id, "Runtime", style: "display: block" %>
+    <%= form.collection_select :runtime_id, @runtimes, :id, :name %>
+  </div>
+
+  <div>
+    <%= form.label :record_trace, "Record trace" %>
+    <%= form.check_box :record_trace %>
+  </div>
+
+  <div>
+    <%= form.submit "Execute" %>
+  </div>
+<% end %>

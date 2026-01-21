@@ -1,0 +1,43 @@
+<%= form_with(model: program) do |form| %>
+  <% if program.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(program.errors.count, "error") %> prohibited this program from being saved:</h2>
+
+      <ul>
+        <% program.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.textarea :description %>
+  </div>
+
+  <div>
+    <%= form.label :instruction_set, style: "display: block" %>
+    <%= form.text_field :instruction_set, value: program.instruction_set.presence || "c0-vm" %>
+  </div>
+
+  <div>
+    <%= form.label :assembly_source, "Assembly (optional)", style: "display: block" %>
+    <%= form.text_area :assembly_source, value: program.assembly_source, rows: 8, placeholder: "FUNC main 0 0\nBIPUSH 1\nRETURN\nEND" %>
+    <small>If provided, assembly will be parsed into bytecode and override the JSON below.</small>
+  </div>
+
+  <div>
+    <%= form.label :bytecode, style: "display: block" %>
+    <%= form.text_area :bytecode, value: program.bytecode.to_json, rows: 10 %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

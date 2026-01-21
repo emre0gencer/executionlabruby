@@ -1,0 +1,30 @@
+<% content_for :title, "Execution" %>
+
+<h1>Execution</h1>
+
+<p><strong>Program:</strong> <%= @execution.program.name %></p>
+<p><strong>Runtime:</strong> <%= @execution.runtime.name %></p>
+<p><strong>Status:</strong> <%= @execution.status %></p>
+
+<% if @execution.error.present? %>
+  <div style="color: red">
+    <strong>Error:</strong> <%= @execution.error %>
+  </div>
+<% end %>
+
+<% if @execution.result.present? %>
+  <h2>Result</h2>
+  <pre><%= JSON.pretty_generate(@execution.result) %></pre>
+<% end %>
+
+<% if @execution.metrics.present? %>
+  <h2>Metrics</h2>
+  <pre><%= JSON.pretty_generate(@execution.metrics) %></pre>
+<% end %>
+
+<% if @execution.execution_traces.any? %>
+  <h2>Trace</h2>
+  <pre><%= JSON.pretty_generate(@execution.execution_traces.order(:step).map(&:snapshot)) %></pre>
+<% end %>
+
+<p><%= link_to "Back to executions", executions_path %></p>
