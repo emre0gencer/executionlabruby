@@ -1,26 +1,51 @@
-<% content_for :title, "Executions" %>
+<% content_for :title, "Executions — Execution Lab" %>
 
-<h1>Executions</h1>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-white">Executions</h1>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Program</th>
-      <th>Runtime</th>
-      <th>Status</th>
-      <th>Created</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @executions.each do |execution| %>
-      <tr>
-        <td><%= execution.program.name %></td>
-        <td><%= execution.runtime.name %></td>
-        <td><%= execution.status %></td>
-        <td><%= l(execution.created_at, format: :short) %></td>
-        <td><%= link_to "View", execution_path(execution) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<% if @executions.empty? %>
+  <div class="bg-slate-800/50 border border-slate-700 border-dashed rounded-xl p-12 text-center">
+    <p class="text-slate-500">No executions yet.</p>
+    <%= link_to "Run a program", new_execution_path, class: "text-indigo-400 hover:text-indigo-300 underline text-sm" %>
+  </div>
+<% else %>
+  <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-700 text-left">
+          <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Program</th>
+          <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Runtime</th>
+          <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+          <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">When</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-700/50">
+        <% status_badge = { "completed" => "bg-emerald-900/40 text-emerald-300 border-emerald-800",
+                            "failed"    => "bg-red-900/40 text-red-300 border-red-800",
+                            "running"   => "bg-yellow-900/40 text-yellow-300 border-yellow-800",
+                            "pending"   => "bg-slate-700/40 text-slate-400 border-slate-600" } %>
+        <% @executions.each do |execution| %>
+          <tr class="hover:bg-slate-700/30 transition-colors">
+            <td class="px-4 py-3">
+              <%= link_to execution.program.name, program_path(execution.program),
+                    class: "text-white hover:text-indigo-300 font-medium transition-colors" %>
+            </td>
+            <td class="px-4 py-3 text-slate-400"><%= execution.runtime.name %></td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-0.5 text-xs font-mono rounded-full border <%= status_badge[execution.status] || status_badge["pending"] %>">
+                <%= execution.status %>
+              </span>
+            </td>
+            <td class="px-4 py-3 text-slate-500 text-xs"><%= time_ago_in_words(execution.created_at) %> ago</td>
+            <td class="px-4 py-3 text-right">
+              <%= link_to "View →", execution_path(execution),
+                    class: "text-indigo-400 hover:text-indigo-300 text-xs transition-colors" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

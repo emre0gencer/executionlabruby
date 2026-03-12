@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
-  instruction_set: MyString
-  bytecode: 
+  name: Add Two Numbers
+  description: Simple addition program
+  instruction_set: c0-vm
+  bytecode: '{"instruction_set":"c0-vm","int_pool":[],"string_pool":[],"native_pool":[],"functions":[{"name":"main","num_args":0,"num_vars":0,"code":[{"pc":0,"opcode":"BIPUSH","operand":2},{"pc":2,"opcode":"BIPUSH","operand":3},{"pc":4,"opcode":"IADD"},{"pc":5,"opcode":"RETURN"}]}]}'
 
 two:
-  name: MyString
-  description: MyText
-  instruction_set: MyString
-  bytecode: 
+  name: Push Constant
+  description: Pushes a constant onto the stack
+  instruction_set: c0-vm
+  bytecode: '{"instruction_set":"c0-vm","int_pool":[],"string_pool":[],"native_pool":[],"functions":[{"name":"main","num_args":0,"num_vars":0,"code":[{"pc":0,"opcode":"BIPUSH","operand":42},{"pc":2,"opcode":"RETURN"}]}]}'

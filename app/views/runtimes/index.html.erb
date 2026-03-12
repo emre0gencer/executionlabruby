@@ -1,17 +1,29 @@
-<% content_for :title, "Runtimes" %>
+<% content_for :title, "Runtimes — Execution Lab" %>
 
-<h1>Runtimes</h1>
-
-<div>
-  <% @runtimes.each do |runtime| %>
-    <div>
-      <strong><%= runtime.name %></strong>
-      <div>Instruction set: <%= runtime.instruction_set %></div>
-      <div>Adapter: <%= runtime.adapter_class %></div>
-      <div><%= link_to "Show", runtime_path(runtime) %></div>
-    </div>
-    <hr />
-  <% end %>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-white">Runtimes</h1>
+  <%= link_to "＋ New Runtime", new_runtime_path,
+        class: "px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors" %>
 </div>
 
-<%= link_to "New runtime", new_runtime_path %>
+<div class="space-y-3">
+  <% @runtimes.each do |runtime| %>
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 flex items-center justify-between gap-4">
+      <div class="min-w-0">
+        <div class="flex items-center gap-3 mb-1">
+          <h2 class="text-white font-semibold"><%= runtime.name %></h2>
+          <span class="px-2 py-0.5 text-xs font-mono rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-800">
+            <%= runtime.instruction_set %>
+          </span>
+        </div>
+        <p class="text-slate-500 text-sm font-mono truncate"><%= runtime.adapter_class %></p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <%= link_to "View", runtime_path(runtime),
+              class: "px-3 py-1.5 text-sm text-slate-300 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors" %>
+        <%= link_to "Edit", edit_runtime_path(runtime),
+              class: "px-3 py-1.5 text-sm text-slate-300 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors" %>
+      </div>
+    </div>
+  <% end %>
+</div>

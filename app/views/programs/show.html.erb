@@ -1,11 +1,74 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "#{@program.name} — Execution Lab" %>
 
-<%= render @program %>
+<div class="mb-6">
+  <%= link_to "← Programs", programs_path, class: "text-slate-400 hover:text-slate-200 text-sm transition-colors" %>
+</div>
 
-<div>
-  <%= link_to "Execute", new_execution_path(program_id: @program.id) %> |
-  <%= link_to "Edit this program", edit_program_path(@program) %> |
-  <%= link_to "Back to programs", programs_path %>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <%# Left column: metadata + code %>
+  <div class="lg:col-span-2 space-y-6">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <h1 class="text-2xl font-bold text-white"><%= @program.name %></h1>
+        <span class="shrink-0 px-3 py-1 text-xs font-mono rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-800">
+          <%= @program.instruction_set %>
+        </span>
+      </div>
+      <% if @program.description.present? %>
+        <p class="text-slate-400"><%= @program.description %></p>
+      <% end %>
+    </div>
 
-  <%= button_to "Destroy this program", @program, method: :delete %>
+    <%# Assembly / Bytecode tabs %>
+    <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden" data-controller="tabs">
+      <div class="flex border-b border-slate-700">
+        <button data-action="tabs#show" data-tabs-target="tab" data-tabs-panel-param="bytecode"
+                class="px-4 py-3 text-sm font-medium text-white border-b-2 border-indigo-500 bg-slate-700/50">
+          Bytecode JSON
+        </button>
+        <% if @program.assembly_source.present? %>
+          <button data-action="tabs#show" data-tabs-target="tab" data-tabs-panel-param="assembly"
+                  class="px-4 py-3 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+            Assembly
+          </button>
+        <% end %>
+      </div>
+      <div data-tabs-target="panel" data-tabs-panel="bytecode">
+        <pre class="font-mono text-sm bg-slate-950 text-green-400 p-4 overflow-auto max-h-96"><%= JSON.pretty_generate(@program.bytecode || {}) %></pre>
+      </div>
+      <% if @program.assembly_source.present? %>
+        <div data-tabs-target="panel" data-tabs-panel="assembly" class="hidden">
+          <pre class="font-mono text-sm bg-slate-950 text-green-400 p-4 overflow-auto max-h-96"><%= @program.assembly_source %></pre>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# Right column: actions %>
+  <div class="space-y-3">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-3">
+      <h3 class="text-slate-300 font-semibold text-sm uppercase tracking-wider">Actions</h3>
+
+      <%= link_to new_execution_path(program_id: @program.id),
+            class: "flex items-center justify-center gap-2 w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-colors" do %>
+        ▶ Run on Runtime
+      <% end %>
+
+      <%= link_to compare_program_path(@program),
+            class: "flex items-center justify-center gap-2 w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors" do %>
+        ∥ Compare All Runtimes
+      <% end %>
+
+      <%= link_to edit_program_path(@program),
+            class: "flex items-center justify-center gap-2 w-full px-4 py-3 bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium rounded-lg transition-colors" do %>
+        Edit Program
+      <% end %>
+
+      <%= button_to @program, method: :delete,
+            form: { data: { turbo_confirm: "Delete #{@program.name}? This cannot be undone." } },
+            class: "flex items-center justify-center gap-2 w-full px-4 py-3 bg-red-900/60 hover:bg-red-800/60 text-red-300 hover:text-red-200 font-medium rounded-lg transition-colors border border-red-800" do %>
+        Delete Program
+      <% end %>
+    </div>
+  </div>
 </div>

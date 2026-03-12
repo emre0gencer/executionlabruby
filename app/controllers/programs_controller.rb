@@ -1,9 +1,9 @@
 class ProgramsController < ApplicationController
-  before_action :set_program, only: %i[ show edit update destroy ]
+  before_action :set_program, only: %i[ show edit update destroy compare ]
 
   # GET /programs or /programs.json
   def index
-    @programs = Program.all
+    @programs = Program.order(:name)
   end
 
   # GET /programs/1 or /programs/1.json
@@ -48,6 +48,16 @@ class ProgramsController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @program.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  # GET /programs/1/compare
+  def compare
+    @runtimes = Runtime.where(instruction_set: @program.instruction_set).order(:name)
+    @executions = @runtimes.map do |runtime|
+      ExecutionLab::ExecutionEngine.new(program: @program, runtime: runtime, record_trace: false).run
+    rescue ExecutionLab::VMError => e
+      Execution.new(program: @program, runtime: runtime, status: :failed, error: e.message)
     end
   end
 

@@ -1,28 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full bg-slate-950">
   <head>
-    <title><%= content_for(:title) || "Rails App" %></title>
+    <title><%= content_for(:title) || "Execution Lab" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Rails App">
+    <meta name="application-name" content="Execution Lab">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="h-full bg-slate-950 text-slate-100">
+    <nav class="sticky top-0 z-50 bg-slate-900 border-b border-slate-800 shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-2">
+            <%= link_to root_path, class: "flex items-center gap-2 text-white font-bold text-lg hover:text-indigo-400 transition-colors" do %>
+              <span class="text-indigo-400 text-xl">⬡</span>
+              <span>Execution Lab</span>
+            <% end %>
+          </div>
+          <div class="flex items-center gap-1">
+            <%= link_to "Programs", programs_path,
+                  class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{request.path.start_with?('/programs') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700'}" %>
+            <%= link_to "Runtimes", runtimes_path,
+                  class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{request.path.start_with?('/runtimes') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700'}" %>
+            <%= link_to "Runs", executions_path,
+                  class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{request.path.start_with?('/executions') ? 'bg-slate-700 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-700'}" %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <% if notice.present? %>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4" data-controller="flash">
+        <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-emerald-900/60 border border-emerald-700 text-emerald-200 text-sm">
+          <span><%= notice %></span>
+          <button data-action="flash#dismiss" class="text-emerald-400 hover:text-white transition-colors text-lg leading-none">&times;</button>
+        </div>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4" data-controller="flash">
+        <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-red-900/60 border border-red-700 text-red-200 text-sm">
+          <span><%= alert %></span>
+          <button data-action="flash#dismiss" class="text-red-400 hover:text-white transition-colors text-lg leading-none">&times;</button>
+        </div>
+      </div>
+    <% end %>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <%= yield %>
+    </main>
   </body>
 </html>

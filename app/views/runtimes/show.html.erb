@@ -1,17 +1,39 @@
-<% content_for :title, @runtime.name %>
+<% content_for :title, "#{@runtime.name} — Execution Lab" %>
 
-<h1><%= @runtime.name %></h1>
+<div class="mb-6">
+  <%= link_to "← Runtimes", runtimes_path, class: "text-slate-400 hover:text-slate-200 text-sm transition-colors" %>
+</div>
 
-<p><strong>Instruction set:</strong> <%= @runtime.instruction_set %></p>
-<p><strong>Adapter class:</strong> <%= @runtime.adapter_class %></p>
+<div class="max-w-2xl space-y-6">
+  <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <h1 class="text-2xl font-bold text-white"><%= @runtime.name %></h1>
+      <span class="shrink-0 px-3 py-1 text-xs font-mono rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-800">
+        <%= @runtime.instruction_set %>
+      </span>
+    </div>
+    <div class="space-y-2">
+      <div class="flex gap-3">
+        <span class="text-slate-500 text-sm w-28 shrink-0">Adapter class</span>
+        <span class="font-mono text-sm text-slate-300"><%= @runtime.adapter_class %></span>
+      </div>
+    </div>
+  </div>
 
-<% if @runtime.config.present? %>
-  <h2>Config</h2>
-  <pre><%= JSON.pretty_generate(@runtime.config) %></pre>
-<% end %>
+  <% if @runtime.config.present? %>
+    <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden">
+      <div class="px-4 py-3 border-b border-slate-700">
+        <h3 class="text-slate-300 font-semibold text-sm">Configuration</h3>
+      </div>
+      <pre class="font-mono text-sm bg-slate-950 text-green-400 p-4 overflow-auto"><%= JSON.pretty_generate(@runtime.config) %></pre>
+    </div>
+  <% end %>
 
-<div>
-  <%= link_to "Edit", edit_runtime_path(@runtime) %> |
-  <%= link_to "Back", runtimes_path %>
-  <%= button_to "Destroy", @runtime, method: :delete %>
+  <div class="flex items-center gap-3">
+    <%= link_to "Edit", edit_runtime_path(@runtime),
+          class: "px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-medium rounded-lg transition-colors" %>
+    <%= button_to "Delete", @runtime, method: :delete,
+          form: { data: { turbo_confirm: "Delete #{@runtime.name}? This cannot be undone." } },
+          class: "px-4 py-2 bg-red-900/60 hover:bg-red-800/60 text-red-300 text-sm font-medium rounded-lg transition-colors border border-red-800" %>
+  </div>
 </div>

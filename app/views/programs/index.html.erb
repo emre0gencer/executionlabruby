@@ -1,17 +1,25 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Programs — Execution Lab" %>
 
-<% content_for :title, "Programs" %>
-
-<h1>Programs</h1>
-
-<div id="programs">
-  <% @programs.each do |program| %>
-    <%= render program %>
-    <p>
-      <%= link_to "Show this program", program %>
-      <%= link_to "Execute", new_execution_path(program_id: program.id) %>
-    </p>
+<div class="flex items-center justify-between mb-8">
+  <div>
+    <h1 class="text-3xl font-bold text-white">Programs</h1>
+    <p class="text-slate-400 mt-1">C0 bytecode programs for execution and comparison</p>
+  </div>
+  <%= link_to new_program_path, class: "inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors" do %>
+    <span class="text-lg leading-none">+</span> New Program
   <% end %>
 </div>
 
-<%= link_to "New program", new_program_path %>
+<% if @programs.empty? %>
+  <div class="text-center py-16 text-slate-500">
+    <div class="text-5xl mb-4">⬡</div>
+    <p class="text-lg">No programs yet.</p>
+    <%= link_to "Create your first program", new_program_path, class: "mt-2 text-indigo-400 hover:text-indigo-300 underline" %>
+  </div>
+<% else %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @programs.each do |program| %>
+      <%= render program %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,24 +1,44 @@
-<% content_for :title, "New Execution" %>
+<% content_for :title, "Run Program — Execution Lab" %>
 
-<h1>New Execution</h1>
+<div class="mb-6">
+  <% if @program %>
+    <%= link_to "← #{@program.name}", program_path(@program), class: "text-slate-400 hover:text-slate-200 text-sm transition-colors" %>
+  <% else %>
+    <%= link_to "← Programs", programs_path, class: "text-slate-400 hover:text-slate-200 text-sm transition-colors" %>
+  <% end %>
+</div>
 
-<%= form_with url: executions_path, method: :post do |form| %>
-  <div>
-    <%= form.label :program_id, "Program", style: "display: block" %>
-    <%= form.collection_select :program_id, @programs, :id, :name, selected: @program&.id %>
-  </div>
+<div class="max-w-lg">
+  <h1 class="text-2xl font-bold text-white mb-6">Run Program</h1>
 
-  <div>
-    <%= form.label :runtime_id, "Runtime", style: "display: block" %>
-    <%= form.collection_select :runtime_id, @runtimes, :id, :name %>
-  </div>
+  <%= form_with url: executions_path, method: :post, class: "space-y-5" do |form| %>
+    <div>
+      <label class="block text-sm font-medium text-slate-300 mb-1.5">Program</label>
+      <%= form.collection_select :program_id, @programs, :id, :name,
+            { selected: @program&.id },
+            { class: "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" } %>
+    </div>
 
-  <div>
-    <%= form.label :record_trace, "Record trace" %>
-    <%= form.check_box :record_trace %>
-  </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-300 mb-1.5">Runtime</label>
+      <%= form.collection_select :runtime_id, @runtimes, :id, :name,
+            {},
+            { class: "w-full bg-slate-800 border border-slate-600 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" } %>
+    </div>
 
-  <div>
-    <%= form.submit "Execute" %>
-  </div>
-<% end %>
+    <label class="flex items-start gap-3 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 cursor-pointer hover:border-slate-600 transition-colors">
+      <%= form.check_box :record_trace,
+            { class: "mt-0.5 w-4 h-4 text-indigo-600 bg-slate-700 border-slate-500 rounded focus:ring-indigo-500 shrink-0" },
+            "1", "0" %>
+      <div>
+        <span class="text-sm font-medium text-slate-300">Record execution trace</span>
+        <p class="text-xs text-slate-500 mt-0.5">Capture step-by-step VM state for the debugger (slower)</p>
+      </div>
+    </label>
+
+    <div class="pt-2">
+      <%= form.submit "▶ Execute",
+            class: "w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

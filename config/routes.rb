@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :programs
+  resources :programs do
+    get :compare, on: :member
+  end
   resources :runtimes
   resources :executions, only: %i[index new create show]
   get "/home", to: redirect("/programs")
